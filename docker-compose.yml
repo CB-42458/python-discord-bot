@@ -1,0 +1,11 @@
+version: '3.9'
+
+services:
+  bot:
+    build: ./bot
+    command: ./entrypoint.sh
+    volumes:
+      - /path:/app
+
+volumes:
+  bot-data:
