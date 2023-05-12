@@ -1,3 +1,4 @@
 discord
 psutil
 python-dotenv
+requests
