@@ -5,7 +5,7 @@ services:
     build: ./bot
     command: ./entrypoint.sh
     volumes:
-      - /path:/app
+      - discord-bot-data:/app
 
 volumes:
-  bot-data:
+  discord-bot-data:
