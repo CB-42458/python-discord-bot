@@ -3,9 +3,6 @@ version: '3.9'
 services:
   bot:
     build: ./bot
-    command: ./entrypoint.sh
+    command: bash -c "chmod +x /app/entrypoint.sh && /app/entrypoint.sh"
     volumes:
-      - discord-bot-data:/app
-
-volumes:
-  discord-bot-data:
+      - ./bot:/app
