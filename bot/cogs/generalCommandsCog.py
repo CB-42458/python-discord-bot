@@ -63,7 +63,7 @@ class GeneralCommandsCog(commands.Cog):
         """ Sends a random meme """
         await interaction.response.defer()
         # check if the message was in the channel ids
-        if interaction.channel.id in (MEME_CHANNEL_ID):
+        if interaction.channel.id in [MEME_CHANNEL_ID]:
             # get a random meme from the api
             response = requests.get("https://meme-api.com/gimme")
             if response.status_code == 200:

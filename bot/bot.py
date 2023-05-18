@@ -31,7 +31,7 @@ class Client(commands.Bot):
         """
         Loads the cogs
         """
-        cogs = ("cogs.generalCommandsCog")
+        cogs = ["cogs.generalCommandsCog"]
         for cog in cogs:
             await self.load_extension(cog)
 
