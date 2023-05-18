@@ -18,4 +18,14 @@ docker compose -f "docker-compose.yml" up -d --build
 ```
 
 ### Adding cogs
-To add cogs to the bot you need to create a new python (or folder with python files) file in the `./bot/cogs` directory.
+To add cogs to the bot you need to create a new python (or folder with python files) file in the `./bot/cogs` directory. You can use the `./bot/generalCommandsCog.py` file as an example. Once you have created your cog you need to add it to the `./bot/bot.py` file. You can do this by modifying the decleration of the `cogs` variable in the `setup_hook` function of the class `Client`. For example:
+if your cog file is called `./bot/cogs/myCog.py` then you would add it to the `cogs` variable like so:
+```py
+async def setup_hook(self) -> None:
+    """
+    Loads the cogs
+    """
+    cogs = ["cogs.generalCommandsCog", "cogs.myCog"] # <- add your cog here
+    for cog in cogs:
+        await self.load_extension(cog)
+```
