@@ -5,6 +5,7 @@ import json
 import os
 
 import discord
+import logger
 import requests
 from discord import app_commands
 from discord.ext import commands
@@ -31,18 +32,21 @@ def not_blacklisted_user(interaction: discord.Interaction) -> bool:
 
 
 class GeneralCommandsCog(commands.Cog):
+    """Cog for general commands"""
+
     def __init__(self, client: commands.Bot):
         self.bot = client
 
     @app_commands.command(name="ping", description="Pong!")
     @app_commands.check(not_blacklisted_user)
-    async def ping(self, interaction: discord.Interaction) -> None:
+    async def ping(self, interaction: discord.InteractionMessage) -> None:
         """ Pong! """
         await interaction.response.send_message("Pong!", ephemeral=True)
+        logger.log("INFO", "generalCommandsCog.py", f"{interaction.user.name} used the ping command")
 
     @app_commands.command(name="cleardms", description="bot removes all the messages that it has sent in your DMs")
     @app_commands.check(not_blacklisted_user)
-    async def clear_dms(self, interaction: discord.Interaction) -> None:
+    async def clear_dms(self, interaction: discord.InteractionMessage) -> None:
         """ bot removes all the messages that it has sent in your DMs """
         if interaction.user.id == OWNER_ID:
             await interaction.response.send_message("Deleting all my messages in your DMs", ephemeral=True)
@@ -56,10 +60,11 @@ class GeneralCommandsCog(commands.Cog):
         else:
             # if the user is not the owner of the bot
             await interaction.response.send_message("You are not the owner of the bot", ephemeral=True)
+        logger.log("INFO", "generalCommandsCog.py", f"{interaction.user.name} used the cleardms command")
 
     @app_commands.command(name="meme", description="Sends a random meme")
     @app_commands.check(not_blacklisted_user)
-    async def meme(self, interaction: discord.Interaction) -> None:
+    async def meme(self, interaction: discord.InteractionMessage) -> None:
         """ Sends a random meme """
         await interaction.response.defer()
         # check if the message was in the channel ids
@@ -72,7 +77,7 @@ class GeneralCommandsCog(commands.Cog):
                 meme.set_image(url=str(data["url"]))
             else:
                 meme = discord.Embed(title="Error", description="Something went wrong", color=discord.Color.red())
-            
+
             # send the meme
             meme_message: discord.WebhookMessage = await interaction.followup.send(embed=meme)
 
@@ -81,10 +86,11 @@ class GeneralCommandsCog(commands.Cog):
         # if the message was not in the channel ids
         else:
             await interaction.followup.send("This command can only be used in the #memez channel", ephemeral=True)
+        logger.log("INFO", "generalCommandsCog.py", f"{interaction.user.name} used the meme command")
 
     @app_commands.command(name="pfp", description="Sends the profile picture of the user")
     @app_commands.check(not_blacklisted_user)
-    async def pfp(self, interaction: discord.Interaction, user: discord.Member = None) -> None:
+    async def pfp(self, interaction: discord.InteractionMessage, user: discord.Member = None) -> None:
         """ Sends the profile picture of the user """
         if user is None:
             user = interaction.user
@@ -92,8 +98,13 @@ class GeneralCommandsCog(commands.Cog):
         embed = discord.Embed(title=f"{user.name}'s profile picture")
         embed.set_image(url=user.avatar.url)
         await interaction.response.send_message(embed=embed)
+        logger.log(
+            "INFO", "generalCommandsCog.py",
+            f"{interaction.user.name} used requested the profile picture of {user.name}"
+        )
 
 
 async def setup(client: commands.Bot) -> None:
-    """ Setup the cog """
+    """ Set up the cog """
     await client.add_cog(GeneralCommandsCog(client), guild=GUILD)
+    logger.log("INFO", "generalCommandsCog.py", "GeneralCommandsCog loaded")
