@@ -18,6 +18,11 @@ RUN chmod +x app/entrypoint.sh
 # set the working directory
 WORKDIR /app
 
+# install the logger package
+RUN pip install ./loggerPackage
+RUN rm -rf ./loggerPackage/build
+RUN rm -rf ./loggerPackage/logger.egg-info
+
 ENV PYTHONUNBUFFERED=1
 # run the bot
 CMD ["python", "-u", "supervisor.py"]
