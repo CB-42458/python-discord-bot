@@ -3,6 +3,6 @@ version: '3.9'
 services:
   bot:
     build: ./bot
-    command: bash -c "chmod +x /app/entrypoint.sh && /app/entrypoint.sh"
+    command: bash -c "python /app/supervisor.py"
     volumes:
       - ./bot:/app
